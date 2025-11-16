@@ -1,0 +1,27 @@
+# Codebase Analyzer v2 - Requirements
+# 
+# This project uses only the Python standard library for core functionality.
+# No external dependencies are required for production use.
+#
+# Python Version: 3.6+
+
+# Development Dependencies (optional)
+# Install with: pip install -r requirements.txt
+# Or: pip install -e .[dev]
+
+# Testing
+pytest>=7.0.0
+pytest-cov>=4.0.0
+
+# Code Quality
+black>=23.0.0
+flake8>=6.0.0
+mypy>=1.0.0
+pylint>=2.15.0
+
+# Documentation (optional)
+sphinx>=5.0.0
+sphinx-rtd-theme>=1.0.0
+
+# Note: The core package has ZERO external dependencies!
+# All functionality uses Python standard library only.

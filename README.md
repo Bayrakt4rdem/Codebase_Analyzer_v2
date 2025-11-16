@@ -4,6 +4,8 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20Linux%20%7C%20macOS-lightgrey.svg)](https://github.com/Bayrakt4rdem/Codebase_Analyzer_v2)
 [![Dependencies](https://img.shields.io/badge/dependencies-0-success.svg)](https://github.com/Bayrakt4rdem/Codebase_Analyzer_v2)
+[![PyPI](https://img.shields.io/badge/pip-installable-brightgreen.svg)](https://github.com/Bayrakt4rdem/Codebase_Analyzer_v2)
+[![Version](https://img.shields.io/badge/version-2.0.0-blue.svg)](https://github.com/Bayrakt4rdem/Codebase_Analyzer_v2)
 
 A comprehensive CLI tool for analyzing codebases. Scan your projects to get insights into code quality, technical debt, complexity metrics, test coverage, and more. Zero external dependencies required.
 
@@ -50,7 +52,28 @@ Automatically excludes build artifacts and common non-source directories:
 
 ## Installation
 
-No installation required. Clone the repository and run directly:
+### Via pip (recommended)
+
+```bash
+# Install from local directory (inside CodeBase_Analyzer_v2 folder)
+pip install -e .
+
+# After installation, use the command anywhere
+codebase-analyzer --help
+# or use the shorter alias
+cba --help
+
+# Alternative: run as module (always works)
+python -m cli --help
+```
+
+**Note:** If you get a PATH warning during installation, you can either:
+1. Add the Scripts directory to your PATH (recommended)
+2. Use `python -m cli` instead of `codebase-analyzer`
+
+### Direct usage (without installation)
+
+Clone the repository and run directly:
 
 ```bash
 git clone https://github.com/Bayrakt4rdem/Codebase_Analyzer_v2.git
@@ -63,6 +86,27 @@ python cli.py --help
 - No external dependencies (uses Python standard library only)
 
 ## Quick Start
+
+### After pip installation
+
+```bash
+# Analyze current directory
+codebase-analyzer .
+
+# Full analysis with all features enabled
+codebase-analyzer . --advanced
+
+# Analyze specific project with export
+codebase-analyzer /path/to/project --advanced --export json --output report.json
+
+# Enable specific analyzers only
+codebase-analyzer . --todos --dependencies --tests --complexity
+
+# Use the shorter alias
+cba . --advanced
+```
+
+### Without installation
 
 ```bash
 # Analyze current directory
@@ -84,9 +128,13 @@ python cli.py . --todos --dependencies --tests --complexity
 
 ```bash
 # Simple mode - basic statistics only
+codebase-analyzer /path/to/project
+# Or without pip install:
 python cli.py /path/to/project
 
 # Advanced mode - all analyzers enabled
+codebase-analyzer . --advanced
+# Or without pip install:
 python cli.py . --advanced
 ```
 
@@ -94,32 +142,40 @@ python cli.py . --advanced
 
 ```bash
 # Track TODO comments
-python cli.py . --todos
+codebase-analyzer . --todos
+# Or: python cli.py . --todos
 
 # Analyze dependencies
-python cli.py . --dependencies
+codebase-analyzer . --dependencies
+# Or: python cli.py . --dependencies
 
 # Check test coverage
-python cli.py . --tests
+codebase-analyzer . --tests
+# Or: python cli.py . --tests
 
 # Calculate complexity metrics
-python cli.py . --complexity
+codebase-analyzer . --complexity
+# Or: python cli.py . --complexity
 
 # Combine multiple analyzers
-python cli.py . --todos --tests --docs --quality
+codebase-analyzer . --todos --tests --docs --quality
+# Or: python cli.py . --todos --tests --docs --quality
 ```
 
 ### Export Reports
 
 ```bash
 # Export to JSON
-python cli.py . --advanced --export json --output report.json
+codebase-analyzer . --advanced --export json --output report.json
+# Or: python cli.py . --advanced --export json --output report.json
 
 # Export to text file
-python cli.py . --export report.txt
+codebase-analyzer . --export report.txt
+# Or: python cli.py . --export report.txt
 
 # Disable progress bars for cleaner output
-python cli.py . --no-progress --no-color > analysis.txt
+codebase-analyzer . --no-progress --no-color > analysis.txt
+# Or: python cli.py . --no-progress --no-color > analysis.txt
 ```
 
 ### Programmatic Usage
@@ -127,10 +183,15 @@ python cli.py . --no-progress --no-color > analysis.txt
 See `examples/basic_usage.py` for examples of using the analyzer in your own Python code:
 
 ```python
-from core.analyzer_v2 import AdvancedCodebaseAnalyzer
+from codebase_analyzer_v2.core.analyzer_v2 import AdvancedCodebaseAnalyzer
 
-analyzer = AdvancedCodebaseAnalyzer(enable_quality=True, enable_complexity=True)
-base_results, advanced_results = analyzer.analyze_advanced("./my-project")
+analyzer = AdvancedCodebaseAnalyzer(
+    enable_quality=True, 
+    enable_complexity=True,
+    show_progress=True
+)
+report = analyzer.analyze()
+print(report)
 ```
 
 ## Command-Line Options

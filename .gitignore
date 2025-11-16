@@ -1,17 +1,19 @@
-# Python
+# Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
 *$py.class
 *.so
 
-# Reports
-*.txt
-*.json
-!README.md
+# Distribution / packaging
+build/
+dist/
+*.egg-info/
+*.egg
 
-# Documentation
+# Development documentation
 docs/
 memory-bank/
+debug/
 
 # IDE
 .vscode/
@@ -22,3 +24,10 @@ memory-bank/
 # OS
 .DS_Store
 Thumbs.db
+
+# Analysis reports
+*.txt
+*.json
+!requirements.txt
+!package.json
+!pyproject.toml
