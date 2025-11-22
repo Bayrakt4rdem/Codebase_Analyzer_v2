@@ -187,6 +187,81 @@ class AdvancedReportFormatter:
                 print(f"    [XX] {cfg_file} - {description}")
     
     @staticmethod
+    def format_dead_code(report: Dict, base_path: Path):
+        """Format dead code detection section."""
+        dead_code = report.get('advanced', {}).get('dead_code', {})
+        if not dead_code or dead_code.get('dead_code_candidates', 0) == 0:
+            return
+        
+        AdvancedReportFormatter.print_subheader(
+            f">> Dead Code Detection ({dead_code.get('dead_code_candidates', 0)} candidates found)"
+        )
+        
+        print(f"  Total Python Files:   {dead_code.get('total_python_files', 0)}")
+        print(f"  Imported Files:       {dead_code.get('imported_files', 0)}")
+        print(f"  Unreferenced Files:   {dead_code.get('dead_code_candidates', 0)}")
+        
+        by_conf = dead_code.get('by_confidence', {})
+        high = by_conf.get('high', 0)
+        medium = by_conf.get('medium', 0)
+        low = by_conf.get('low', 0)
+        
+        if high + medium + low == 0:
+            print("\n  [OK] No dead code detected!")
+            return
+        
+        print(f"\n  Confidence Breakdown:")
+        print(f"    [!!] High:   {high} file(s) - likely unused")
+        print(f"    [!]  Medium: {medium} file(s) - possibly unused")
+        print(f"    [?]  Low:    {low} file(s) - review recommended")
+        
+        savings = dead_code.get('potential_savings_lines', 0)
+        if savings > 0:
+            print(f"\n  Potential Cleanup: {AdvancedReportFormatter.format_number(savings)} lines")
+        
+        candidates = dead_code.get('candidates', [])
+        
+        # Show high confidence first
+        high_conf_files = [c for c in candidates if c['confidence'] == 'high']
+        if high_conf_files:
+            print(f"\n  [!!] High Confidence Candidates ({len(high_conf_files)}):")
+            for candidate in high_conf_files[:5]:
+                rel_path = AdvancedReportFormatter._get_relative_path(
+                    candidate['relative_path'], Path('.')
+                )
+                lines = candidate.get('lines', 0)
+                reason = candidate.get('reason', 'Unknown')
+                print(f"    • {rel_path}")
+                print(f"      Lines: {lines} | {reason}")
+            if len(high_conf_files) > 5:
+                print(f"    ... and {len(high_conf_files) - 5} more")
+        
+        # Show medium confidence
+        medium_conf_files = [c for c in candidates if c['confidence'] == 'medium']
+        if medium_conf_files:
+            print(f"\n  [!] Medium Confidence ({len(medium_conf_files)}):")
+            for candidate in medium_conf_files[:3]:
+                rel_path = AdvancedReportFormatter._get_relative_path(
+                    candidate['relative_path'], Path('.')
+                )
+                lines = candidate.get('lines', 0)
+                reason = candidate.get('reason', 'Unknown')
+                print(f"    • {rel_path} ({lines} lines)")
+                print(f"      {reason}")
+            if len(medium_conf_files) > 3:
+                print(f"    ... and {len(medium_conf_files) - 3} more")
+        
+        # Show low confidence count only
+        low_conf_files = [c for c in candidates if c['confidence'] == 'low']
+        if low_conf_files:
+            print(f"\n  [?] Low Confidence: {len(low_conf_files)} file(s) - manual review suggested")
+        
+        print("\n  >> Recommendation:")
+        print("    Review high confidence files first. These are likely safe to remove.")
+        print("    Medium confidence files may be used directly (scripts, tools).")
+        print("    Low confidence files likely have legitimate standalone use.")
+    
+    @staticmethod
     def _get_relative_path(file_path: Path, base_path: Path) -> str:
         try:
             return str(file_path.relative_to(base_path))

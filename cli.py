@@ -85,6 +85,11 @@ Examples:
         action='store_true',
         help='Analyze cyclomatic complexity'
     )
+    feature_group.add_argument(
+        '--dead-code',
+        action='store_true',
+        help='Detect potentially unused Python files'
+    )
     
     export_group = parser.add_argument_group('Export Options')
     export_group.add_argument(
@@ -139,6 +144,8 @@ def main():
             features.append('quality')
         if args.complexity:
             features.append('complexity')
+        if args.dead_code:
+            features.append('dead-code')
         
         if features:
             mode = 'advanced'
@@ -230,6 +237,7 @@ def _print_advanced_report(report: dict, analyzer):
     formatter.format_tests(report)
     formatter.format_documentation(report)
     formatter.format_config(report)
+    formatter.format_dead_code(report, analyzer.base_path)
 
 
 def _export_report(report: dict, format: str, output_path: str):

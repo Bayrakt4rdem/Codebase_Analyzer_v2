@@ -32,6 +32,7 @@ class AdvancedCodebaseAnalyzer(CodebaseAnalyzer):
         self.doc_analyzer = None
         self.quality_scorer = None
         self.complexity_analyzer = None
+        self.dead_code_detector = None
         
         self._init_advanced_analyzers()
     
@@ -50,6 +51,7 @@ class AdvancedCodebaseAnalyzer(CodebaseAnalyzer):
             from analyzers.doc_analyzer import DocAnalyzer
             from analyzers.quality_scorer import QualityScorer
             from analyzers.complexity_analyzer import ComplexityAnalyzer
+            from analyzers.dead_code_detector import DeadCodeDetector
             
             if self.mode == 'advanced' or 'todos' in self.features:
                 self.todo_tracker = TodoTracker()
@@ -71,6 +73,9 @@ class AdvancedCodebaseAnalyzer(CodebaseAnalyzer):
             
             if self.mode == 'advanced' or 'complexity' in self.features:
                 self.complexity_analyzer = ComplexityAnalyzer()
+            
+            if self.mode == 'advanced' or 'dead-code' in self.features:
+                self.dead_code_detector = DeadCodeDetector()
                 
         except ImportError as e:
             print(f"Warning: Could not load advanced analyzers: {e}")
@@ -133,6 +138,10 @@ class AdvancedCodebaseAnalyzer(CodebaseAnalyzer):
         if self.complexity_analyzer:
             complexity_results = self.complexity_analyzer.analyze_directory(self.path)
             advanced_reports['complexity'] = self.complexity_analyzer.export_to_dict(complexity_results)
+        
+        if self.dead_code_detector:
+            self.dead_code_detector.analyze_project(self.path)
+            advanced_reports['dead_code'] = self.dead_code_detector.get_report()
         
         if self.quality_scorer:
             quality_input = {

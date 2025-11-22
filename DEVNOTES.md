@@ -1,5 +1,14 @@
 # Development Notes
 
+## v2.1.0 - November 22, 2025
+**Dead Code Detection Feature**
+- Implemented smart dead code detector (dead_code_detector.py)
+- Analyzes import relationships to find unreferenced Python files
+- Intelligent exclusions: entry points, tests, examples, setup files
+- Confidence scoring: high/medium/low to avoid false positives
+- Added --dead-code CLI flag
+- Integrated with advanced formatter and reporting
+
 ## v2.0.0 - November 16, 2025
 **Package Distribution Setup**
 - Added pip install capability (setup.py)

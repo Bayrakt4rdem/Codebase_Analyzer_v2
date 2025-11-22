@@ -15,6 +15,10 @@ docs/
 memory-bank/
 debug/
 
+# Agent system directories (entire directories)
+.agent-manager/
+.github/
+
 # IDE
 .vscode/
 .idea/
@@ -31,3 +35,6 @@ Thumbs.db
 !requirements.txt
 !package.json
 !pyproject.toml
+
+# Backups
+.backups/

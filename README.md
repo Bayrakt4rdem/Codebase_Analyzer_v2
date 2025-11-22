@@ -35,6 +35,7 @@ Codebase Analyzer provides detailed statistics about your project structure, hel
 - Circular dependency detection
 - Code smell identification
 - Security pattern analysis
+- **Dead code detection** - identifies unreferenced Python files
 
 ### Smart Filtering
 Automatically excludes build artifacts and common non-source directories:
@@ -95,6 +96,9 @@ codebase-analyzer .
 
 # Full analysis with all features enabled
 codebase-analyzer . --advanced
+
+# Detect dead code (unreferenced files)
+codebase-analyzer . --dead-code
 
 # Analyze specific project with export
 codebase-analyzer /path/to/project --advanced --export json --output report.json
@@ -157,6 +161,10 @@ codebase-analyzer . --tests
 codebase-analyzer . --complexity
 # Or: python cli.py . --complexity
 
+# Detect dead code
+codebase-analyzer . --dead-code
+# Or: python cli.py . --dead-code
+
 # Combine multiple analyzers
 codebase-analyzer . --todos --tests --docs --quality
 # Or: python cli.py . --todos --tests --docs --quality
@@ -212,6 +220,7 @@ feature flags:
   --config              Scan configuration files
   --quality             Calculate quality score
   --complexity          Analyze cyclomatic complexity
+  --dead-code           Detect potentially unused Python files
 
 output options:
   --export FORMAT       Export format: json
@@ -265,6 +274,7 @@ codebase_analyzer_v2/
 │   ├── doc_analyzer.py         # Documentation coverage checker
 │   ├── config_analyzer.py      # Configuration file scanner
 │   ├── complexity_analyzer.py  # Cyclomatic complexity calculator
+│   ├── dead_code_detector.py   # Dead code detection (unreferenced files)
 │   └── quality_scorer.py       # Overall quality scoring
 ├── formatters/
 │   └── advanced_formatter.py   # Report formatting and display
